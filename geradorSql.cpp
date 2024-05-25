@@ -6,7 +6,7 @@
 
 using namespace std;
 
-string templateSql = "INSERT INTO principal.curso_estrutura (semestre, disciplina, carga_horaria, curso) VALUES\n";
+string templateSql = "INSERT INTO principal.curso_estrutura (semestre, disciplina, carga_horaria, descricao, curso) VALUES\n";
 bool firstLoop = true;
 string inputFilename = "cursos.csv";
 string outputFilename = "insert.txt";
@@ -17,6 +17,7 @@ struct Disciplina {
     string disciplina;
     int carga_horaria;
     int curso;
+    string descricao;
 };
 
 
@@ -75,9 +76,10 @@ void inserirDisciplina(const Disciplina& curso) {
     string disciplina_str = curso.disciplina;
     string carga_horaria_str = to_string(curso.carga_horaria);
     string curso_str = to_string(curso.curso);
+    string descricao_str = curso.descricao;
 
     // Concatenando as strings
-    string linha = "\t("+ semestre_str + ", '" + disciplina_str + "', " + carga_horaria_str + ", '" + curso_str + "'),";
+    string linha = "\t("+ semestre_str + ", '" + disciplina_str + "', " + carga_horaria_str + ", '" + descricao_str + "', "  + curso_str + "),";
 							
 	ofstream myfile;
 	myfile.open ("insert.txt", ios::app);
@@ -105,12 +107,13 @@ void gerarSql(const string& inputFilename) {
     string linha;
     while (getline(arquivo, linha)) {
         vector<string> itens = extrairItens(linha);
-        if (itens.size() == 4) {
+        if (itens.size() == 5) {
             Disciplina disciplina;
             disciplina.semestre = stoi(itens[0]);
             disciplina.disciplina = itens[1];
             disciplina.carga_horaria = stoi(itens[2]);
-            disciplina.curso = stoi(itens[3]);
+            disciplina.descricao = itens[3];
+            disciplina.curso = stoi(itens[4]);
 
             inserirDisciplina(disciplina);
         } else {
