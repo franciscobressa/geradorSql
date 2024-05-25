@@ -8,10 +8,10 @@ using namespace std;
 
 string templateSql = "INSERT INTO principal.curso_estrutura (semestre, disciplina, carga_horaria, descricao, curso) VALUES\n";
 bool firstLoop = true;
-string inputFilename = "cursos.csv";
+string inputFilename = "disciplinas.csv";
 string outputFilename = "insert.txt";
 
-// Definindo a estrutura para armazenar informações sobre um curso
+// Definindo a estrutura para armazenar informações sobre uma disciplina
 struct Disciplina {
     int semestre;
     string disciplina;
@@ -68,15 +68,15 @@ vector<string> extrairItens(const string& linha) {
     return itens;
 }
 
-// Processa e insere informações de curso no banco de dados
-void inserirDisciplina(const Disciplina& curso) {
+// Insere a disciplina no INSERT
+void inserirDisciplina(const Disciplina& disciplina) {
 	
     // Convertendo os valores não-string para string
-    string semestre_str = to_string(curso.semestre);
-    string disciplina_str = curso.disciplina;
-    string carga_horaria_str = to_string(curso.carga_horaria);
-    string curso_str = to_string(curso.curso);
-    string descricao_str = curso.descricao;
+    string semestre_str = to_string(disciplina.semestre);
+    string disciplina_str = disciplina.disciplina;
+    string carga_horaria_str = to_string(disciplina.carga_horaria);
+    string curso_str = to_string(disciplina.curso);
+    string descricao_str = disciplina.descricao;
 
     // Concatenando as strings
     string linha = "\t("+ semestre_str + ", '" + disciplina_str + "', " + carga_horaria_str + ", '" + descricao_str + "', "  + curso_str + "),";
@@ -96,7 +96,7 @@ void inserirDisciplina(const Disciplina& curso) {
   
 }
 
-// Lê o arquivo CSV de cursos e processar suas linhas
+// Lê o arquivo CSV e processa suas linhas
 void gerarSql(const string& inputFilename) {
     ifstream arquivo(inputFilename);
     if (!arquivo.is_open()) {
@@ -104,7 +104,6 @@ void gerarSql(const string& inputFilename) {
         return;
     }
 
-    string linha;
     while (getline(arquivo, linha)) {
         vector<string> itens = extrairItens(linha);
         if (itens.size() == 5) {
