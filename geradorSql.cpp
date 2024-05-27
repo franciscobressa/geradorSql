@@ -104,6 +104,7 @@ void gerarSql(const string& inputFilename) {
         return;
     }
 
+    string linha;
     while (getline(arquivo, linha)) {
         vector<string> itens = extrairItens(linha);
         if (itens.size() == 5) {
